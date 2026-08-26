@@ -23,7 +23,7 @@ def rolar_dano(faces_dado, qtde_dados):
     return dados, resultado
 
 # =========================
-# DADOS DO JOGO
+# INFORMAÇÕES DO JOGO
 # =========================
 
 criaturas = {
@@ -346,8 +346,8 @@ while True:
         
         elif(escolha_animatronico == 2):
             
-            # Foi criada essa opção para caso o mestre precise realizar uma rápida
-            # rolagem para ver se os jogadores depararam o golden freddy.
+            # Foi criada essa opção para caso o mestre precise realizar uma rápida rolagem
+            # para ver se os jogadores encontraram o golden freddy.
             d6_gf1 = random.randint(1,6)
             d6_gf2 = random.randint(1,6)
             
@@ -434,8 +434,9 @@ while True:
             )
             bonus = criatura.get(tipo_teste)['bonus']
             
-            # O viajante tem uma mecânica que enquanto estiver invisível, recebe um bônus e +15 em furtividade.
-            if (escolha_animatronico == 6) and (escolha_teste == 2):
+            # O viajante tem uma mecânica que enquanto estiver invisível, recebe um
+            # bônus e +15 em furtividade.
+            if (escolha_animatronico == 6) and (escolha_teste == 1):
                 invisibilidade = input('O Viajante está invisível? (s/n): ')
                 print('')
                 
@@ -456,8 +457,8 @@ while True:
             # Se o alvo ter somente 1 ataque:
             if len (ataques) == 1:
                 # Cria outra variável intermediária de ataque, dos múltiplos ataques
-                # Na linha a seguir, ele seleciona o 1º ataque já que o alvo possui somente
-                # 1 ataque.
+                # Na linha a seguir, ele seleciona o 1º ataque já que o alvo possui
+                # somente 1 ataque.
                 ataque = ataques.get(1)
             
             else:
@@ -468,7 +469,8 @@ while True:
                     print('1. Gancho')
                     print('2. Mordida')
                     
-                # Na linha a seguir, ele identifica qual ataque foi selecionado
+                # Na linha a seguir, ele identifica qual ataque foi selecionado e
+                # armazena na variável intermediária "Ataque"
                 escolha_ataque = int(input('Escolha o ataque: '))
                 ataque = ataques.get(escolha_ataque)
                 
@@ -478,7 +480,7 @@ while True:
             )
             bonus = ataque.get('bonus')
                 
-            # Se a pizzaria estiver sem luz, a margem de ameaça de Freddy
+            # Se a pizzaria estiver sem luz, a margem de ameaça/crítico de Freddy
             # diminui em 1 ponto.
             if (escolha_animatronico == 1):
                 escuridao = input('A pizza está sem luz? (s/n): ')
@@ -487,8 +489,6 @@ while True:
             elif (escolha_animatronico == 4):
                 if (escolha_ataque == 2):
                     margem_ameaca = 1
-                else:
-                    margem_ameaca = 0
             
             qtde_dados_dano = ataque.get('qtde_dados')
             
@@ -499,7 +499,7 @@ while True:
             else:
                 qtde_dados_dano = ataque.get('qtde_dados')
             
-            #Condição para ataque
+            # Condição para ataque
             print(f"Teste de {tipo_teste} de {criatura.get('nome')}: {resultado + bonus}")
             print("Dados: ", dados)
             
@@ -513,6 +513,7 @@ while True:
                 print("Dados: ", dados_dano, "+", bonus_dano)
                 
             else:
+                # Estrutura para caso o dano seja crítico
                 dados_dano, total_dano = rolar_dano(
                     ataque.get('dado_dano'), (qtde_dados_dano) * 2
                 )
@@ -563,6 +564,7 @@ while True:
             print('Valor ultrapassa o limite.')
     
     elif (escolha_usuario == 4):
+        # Em desenvolvimento.
         pass
     
     else:
