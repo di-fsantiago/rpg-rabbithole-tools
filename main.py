@@ -22,6 +22,9 @@ def rolar_dano(faces_dado, qtde_dados):
     resultado = sum(dados)
     return dados, resultado
 
+def exibir_erro_limite():
+    print('O número informado está fora do alcance.')
+
 # =========================
 # INFORMAÇÕES DO JOGO
 # =========================
@@ -69,6 +72,17 @@ criaturas = {
         'vontade': {
             'bonus': 15,
             'dados': 4
+        },
+        
+        'habilidades': {
+            1: {
+                'nome': 'Aterrorizar',
+                'dado_dano': 8,
+                'qtde_dados': 2,
+                'DT': 25,
+                'tipo_dano': 'Mental',
+                'teste_resist': 'Vontade',
+            },
         },
     
     },
@@ -118,6 +132,17 @@ criaturas = {
         'vontade': {
             'bonus': 10,
             'dados': 3
+        },
+        
+        'habilidades': {
+            1: {
+                'nome': 'Grunhido de Dor',
+                'dado_dano': 6,
+                'qtde_dados': 2,
+                'DT': 20,
+                'tipo_dano': 'Mental',
+                'teste_resist': 'Vontade',
+            },
         },
         
     },
@@ -175,6 +200,30 @@ criaturas = {
         'vontade': {
             'bonus': 15,
             'dados': 3
+        },
+        
+        'habilidades': {
+            1: {
+                'nome': 'Grunhido de Dor',
+                'dado_dano': 6,
+                'qtde_dados': 2,
+                'DT': 20,
+                'tipo_dano': 'Mental',
+                'teste_resist': 'Vontade',
+            },
+            
+            2: {
+                'nome': 'Você não é Capaz',
+                'dado_dano': 6,
+                'qtde_dados': 2,
+                'DT': 25,
+                'tipo_dano': 'Mental',
+                'dado_dano_add': 4,
+                'qtde_dados_add': 4,
+                'bonus_dano_add': 6,
+                'tipo_dano_add': 'Conhecimento',
+                'teste_resist': 'Vontade',
+            },
         },
         
     },
@@ -267,6 +316,30 @@ criaturas = {
             'dados': 4
         },
         
+        'habilidades': {
+            
+            1: {
+                'nome': 'Circo da Morte',
+                'dado_dano': 10,
+                'qtde_dados': 2,
+                'bonus_dano': 5,
+                'DT': 30,
+                'tipo_dano': 'Mental',
+                'teste_resist': 'Vontade',
+            },
+            
+            2: {
+                'nome': 'Quebre minha mente',
+                'dado_dano': 4,
+                'qtde_dados': 1,
+                'bonus_dano': 2,
+                'DT': 20,
+                'tipo_dano': 'Mental',
+                'teste_resist': 'Vontade',
+            },
+            
+        },
+        
     },
     
     6: {
@@ -314,6 +387,18 @@ criaturas = {
             'dados': 4
         },
         
+        'habilidades': {
+            1: {
+                'nome': 'Devorar Memória',
+                'dado_dano': 10,
+                'qtde_dados': 2,
+                'DT': 29,
+                'tipo_dano': 'Mental',
+                'teste_resist': 'Vontade',
+            },
+            
+        },
+        
     },
     
 }
@@ -333,7 +418,7 @@ while True:
     escolha_usuario = int(input('Escolha a função que deseja usar: '))
     print('')
     
-    
+    # Verifica a primeira escolha do usuário
     if escolha_usuario == 1:
         
         print('1: Foxy')
@@ -341,28 +426,26 @@ while True:
         escolha_animatronico= int(input('Escolha a função que deseja usar: '))
         print('')
         
-        if(escolha_animatronico == 1):
+        if escolha_animatronico == 1:
+            # Em desenvolvimento...
             pass
         
-        elif(escolha_animatronico == 2):
-            
-            # Foi criada essa opção para caso o mestre precise realizar uma rápida rolagem
-            # para ver se os jogadores encontraram o golden freddy.
+        elif escolha_animatronico == 2:
+            # Foi criada essa opção para o mestre  realizar uma rápida rolagem para ver se os jogadores 
+            # encontraram o golden freddy.
             d6_gf1 = random.randint(1,6)
             d6_gf2 = random.randint(1,6)
             
             if (d6_gf1 == 1) and (d6_gf2 ==  1):
-                
                 print('GF aparece')
                 print(d6_gf1, d6_gf2)
                 
             else:
-                
                 print('Sala segura')
                 print(d6_gf1, d6_gf2)
                 
         else:
-            pass
+            exibir_erro_limite()
         
     elif escolha_usuario == 2:
         
@@ -379,6 +462,7 @@ while True:
         # Identifica qual animatronico de acordo com o dicionário
         
         if (escolha_animatronico > 6) or (escolha_animatronico < 1):
+            exibir_erro_limite()
             continue
         
         print('')
@@ -425,7 +509,6 @@ while True:
         
         # Estrutura que diferencia testes comuns de ataques, se for diferente de 21, é um Teste
         # Padrão.
-        
         if (escolha_teste != 21):
                      
             # Faz a chamada da função de rolar um teste
@@ -440,7 +523,7 @@ while True:
                 invisibilidade = input('O Viajante está invisível? (s/n): ')
                 print('')
                 
-                if (invisibilidade == 's') and (invisibilidade != '1'):
+                if (invisibilidade == 's') or (invisibilidade == '1'):
                     bonus += criatura.get('furtividade')['invisivel']
             
             print('')
@@ -478,6 +561,7 @@ while True:
             dados, resultado = rolar_teste(
                 20,ataque.get('dados')
             )
+            # Move o bônus de ataque para uma variável intermediária
             bonus = ataque.get('bonus')
                 
             # Se a pizzaria estiver sem luz, a margem de ameaça/crítico de Freddy
@@ -489,12 +573,14 @@ while True:
             elif (escolha_animatronico == 4):
                 if (escolha_ataque == 2):
                     margem_ameaca = 1
-            
+
+            # Move a quantidade de dados de dano para uma variável intermediária.
             qtde_dados_dano = ataque.get('qtde_dados')
             
             if (escolha_animatronico == 6):
                 viajante_dano_add = int(input("Quantos seres o viajante já deixou perturbado "
                 "com devorar memória? "))
+                # Viajante passa a dar mais dano com base na condição cumprida.
                 qtde_dados_dano += viajante_dano_add
             else:
                 qtde_dados_dano = ataque.get('qtde_dados')
@@ -502,7 +588,8 @@ while True:
             # Condição para ataque
             print(f"Teste de {tipo_teste} de {criatura.get('nome')}: {resultado + bonus}")
             print("Dados: ", dados)
-            
+
+            # Acerto normal
             if (resultado < (20-margem_ameaca)) :
                 dados_dano, total_dano = rolar_dano(
                     ataque.get('dado_dano'), qtde_dados_dano
@@ -513,7 +600,7 @@ while True:
                 print("Dados: ", dados_dano, "+", bonus_dano)
                 
             else:
-                # Estrutura para caso o dano seja crítico
+                # Estrutura para acerto crítico, que dobra os dados naturais de dano
                 dados_dano, total_dano = rolar_dano(
                     ataque.get('dado_dano'), (qtde_dados_dano) * 2
                 )
@@ -521,7 +608,8 @@ while True:
                 
                 print(f"Dano do ataque: {total_dano + bonus_dano} de {ataque.get('tipo_dano')}.")
                 print("Dados: ", dados_dano, "+", bonus_dano)
-                
+
+            # Se possuir algum tipo de dano adicional, realiza a estrutura a seguir:
             if 'dado_dano_add' in ataque:
                 dados_add, total_add = rolar_dano(
                     ataque.get('dado_dano_add'),
@@ -540,19 +628,24 @@ while True:
         print('6. Viajante - DT 20, 3d4')
         escolha_animatronico = int(input('Escolha a presença perturbadora do animatrônico para jogar? '))
         print('')
-        
+
+        # As 5 criaturas possuem a mesma rolagem
         if(escolha_animatronico >= 1) and (escolha_animatronico <= 5):
             dados, total_dano = rolar_dano(
                 6,2
             )
-            
+
+            # Golden Freddy possui um bônus de +4 ao dano
             if(escolha_animatronico == 5):
                 print(f"Dano mental: {total_dano+4}.")
                 print("Dados: ", dados, "+4")
+                
+            # Dano padrão para o resto
             else:
                 print(f"Dano mental: {total_dano}.")
                 print("Dados: ", dados)
-            
+                
+        # Viajante dá dano com uma rolagem diferente
         elif(escolha_animatronico == 6):
             dados, resultado = rolar_dano(
                 4,3
@@ -561,23 +654,88 @@ while True:
             print("Dados: ", dados)
             
         else:
-            print('Valor ultrapassa o limite.')
+            exibir_erro_limite()
     
     elif (escolha_usuario == 4):
-        # Em desenvolvimento.
-        pass
+        print('1. Freddy')
+        print('2. Bonnie')
+        print('3. Chica')
+        print('4. Foxy')
+        print('5. Golden Freddy')
+        print('6. Viajante')
+        escolha_animatronico = int(input('Escolha qual criatura: '))
+        print('')
+        criatura = criaturas.get(escolha_animatronico)
+
+        # Escolha ainda deve estrar dentro do alcance
+        if(escolha_animatronico <= 6):
+            # Recebe o valor de habilidades, identificando também caso a criatura não tenha.
+            habilidades = criatura.get('habilidades', {})
+
+            # Informa que a criatura não possui esse tipo de habilidade.
+            if not habilidades:
+                print('A criatura não possui esse tipo de habilidade.')
+                print('')
+                continue
+
+            # Retorna somente a única habilidade lida no dicionário
+            elif len (habilidades) == 1:
+                habilidade = next(iter(habilidades.values()))
+
+            # Cria um laço de repetição que lista todas as habilidades da criatura, perguntando ao usuário qual
+            # habilidade ele irá usar.
+            else:
+                for chave, valor in habilidades.items():
+                    print(f'{chave} - {valor["nome"]}')
+                
+                escolha_habilidade = int(input('Escolha a habilidade: '))
+                habilidade = habilidades.get(escolha_habilidade)
+                print('')
+            
+            dados_dano, total_dano = rolar_dano(
+                habilidade.get('dado_dano'), habilidade.get('qtde_dados')
+            )
+
+            # Informa ao usuário informações da habilidade, como nome, DT e qual o teste de resistência.
+            print(f"Habilidade {habilidade.get('nome')}, DT: {habilidade.get('DT')}, "
+            f"Teste de {habilidade.get('teste_resist')}.")
+
+            # Caso possua algum tipo de bônus de dano, ele o soma no dano da habilidade
+            if 'bonus_dano' in habilidade:
+                bonus_dano = habilidade.get('bonus_dano')
+                print(f"Dano: {total_dano + bonus_dano} {habilidade.get('tipo_dano')}.")
+            # Caso não exista bônus, ele simplesmente o ignora
+            else:
+                print(f"Dano: {total_dano} {habilidade.get('tipo_dano')}.")
+                
+            print("Dados: ", dados_dano)
+
+            # Caso possua dano adicional, ele realiza a rolagem e informa o dano adicional.
+            if 'dado_dano_add' in habilidade:
+                dados_add, total_add = rolar_dano(
+                    habilidade.get('dado_dano_add'),
+                    habilidade.get('qtde_dados_add')
+                )
+                # Caso o dano adicional possua algum tipo de bônus.
+                if 'bonus_dano_add' in habilidade:
+                    bonus_dano_add = habilidade.get('bonus_dano_add')
+                    print(f"Dano Adicional: {total_add + bonus_dano_add} de {habilidade.get('tipo_dano_add')}")
+                else:
+                    print(f"Dano Adicional: {total_add} de {habilidade.get('tipo_dano_add')}")
+                
+                print("Dados: ", dados_add)
+            
+        else:
+            exibir_erro_limite()
     
     else:
-        print('O número informado está fora do limite.')
+        exibir_erro_limite()
         
     print('')
     
-    # PERGUNTA SE QUER CONTINUAR
+    # Pergunta ao usuário se ele quer continuar
     rodar_programa = input('Deseja rodar o código novamente? (s/n): ')
     print('')
     
     if (rodar_programa != 's') and (rodar_programa != '1') and (rodar_programa != 'S'):
         break
-
-
-
