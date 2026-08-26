@@ -647,7 +647,7 @@ while True:
                 
         # Viajante dá dano com uma rolagem diferente
         elif(escolha_animatronico == 6):
-            dados, resultado = rolar_dano(
+            dados, total_dano = rolar_dano(
                 4,3
             )
             print(f"Dano mental: {total_dano}.")
