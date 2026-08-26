@@ -71,12 +71,11 @@ Resultado: 17
 ## Conceitos praticados
 - Funções e parâmetros
 - Estruturas condicionais
-- Loops
-- Dicionários aninhados
+- Modelagem de comportamentos utilizando estruturas de dados- Loops
+- Estruturas de dados com dicionários aninhados
 - Manipulação de dados
 - Geração de números aleatórios
 - Organização de código
-- Tratamento de diferentes comportamentos utilizando estruturas de dados.
 ## Como executar
 O projeto foi desenvolvido em Python 3.x e atualmente é executado
 diretamente pelo arquivo `main.py`.
