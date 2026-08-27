@@ -22,6 +22,13 @@ def rolar_dano(faces_dado, qtde_dados):
     resultado = sum(dados)
     return dados, resultado
 
+def rolar_menor_dado(faces_dado, qtde_dados):
+    dados = []
+    for i in range(qtde_dados):
+        dados.append(random.randint(1,faces_dado))
+    resultado = min(dados)
+    return dados, resultado
+
 def exibir_erro_limite():
     print('O número informado está fora do alcance.')
 
@@ -427,11 +434,43 @@ while True:
         print('')
         
         if escolha_animatronico == 1:
-            # Em desenvolvimento...
-            pass
+            print('- Estado 0, Cortina Fechada.')
+            print('- Estado 1, Cortina levemente aberta.')
+            print('- Estado 2, Cortina completamente aberta.')
+            print('- Estado 3, Cortina completamente aberta e cabeça vibrando.')
+            estado_foxy = int(input("Qual estado o Foxy está? "))
+            
+            if estado_foxy == 0:
+                print('')
+                print('Foxy abrirá sua cortina às 1 da manhã.')
+            elif (estado_foxy == 1) or (estado_foxy == 2):
+                numero_rodadas = int(input('Informe quantas rodadas o Foxy já está nessa fase? '))
+                print('')
+                if(estado_foxy == 1):
+                    qtde_dados_foxy = 2
+                else:
+                    qtde_dados_foxy = 1
+                
+                dados, resultado = rolar_menor_dado(
+                    4, qtde_dados_foxy+numero_rodadas
+                )
+                
+                print('Dados: ', dados)
+                if resultado == 1:
+                    if estado_foxy == 1:
+                        print('Foxy agora está no estado 2 com a cortina completamente aberta')
+                    else:
+                        print('Foxy agora está no estado 3 esperando alguém aparecer em seu campo de visão.')
+                else:
+                    print('Foxy permanece no mesmo estado.')
+            elif (estado_foxy == 3):
+                print('')
+                print('Foxy só precisa esperar alguém aparecer em seu campo de visão para iniciar a perseguição.')
+            else:
+                exibir_erro_limite()
         
         elif escolha_animatronico == 2:
-            # Foi criada essa opção para o mestre  realizar uma rápida rolagem para ver se os jogadores 
+            # Foi criada essa opção para o mestre  realizar uma rápida rolagem para ver se os jogadores
             # encontraram o golden freddy.
             d6_gf1 = random.randint(1,6)
             d6_gf2 = random.randint(1,6)
