@@ -577,7 +577,7 @@ while True:
             margem_ameaca = 0
             
             # Se o alvo ter somente 1 ataque:
-            if len (ataques) == 1:
+            if len(ataques) == 1:
                 # Cria outra variável intermediária de ataque, dos múltiplos ataques
                 # Na linha a seguir, ele seleciona o 1º ataque já que o alvo possui
                 # somente 1 ataque.
@@ -718,7 +718,7 @@ while True:
                 continue
 
             # Retorna somente a única habilidade lida no dicionário
-            elif len (habilidades) == 1:
+            elif len(habilidades) == 1:
                 habilidade = next(iter(habilidades.values()))
 
             # Cria um laço de repetição que lista todas as habilidades da criatura, perguntando ao usuário qual
