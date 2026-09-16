@@ -26,8 +26,7 @@ O sistema possui diferentes criaturas, cada uma com atributos e comportamentos p
 
 ## Tecnologias
 
-- Python 3.x
-- Git
+- Python 3.12
 - GitHub
 
 ### Dependências
@@ -47,7 +46,7 @@ O projeto utiliza apenas bibliotecas da biblioteca padrão do Python.
 
 Ao realizar um teste de furtividade com a criatura "Viajante", o sistema pergunta se a criatura está invisível ou não e aplica o bônus correspondente.
 
-```text
+```Python
 === CASO 1: TESTE DE CRIATURA INVISÍVEL ===
 
 Criatura: Viajante
@@ -78,4 +77,4 @@ Resultado: 17
 - Organização de código
 ## Como executar
 O projeto foi desenvolvido em Python 3.x e atualmente é executado
-diretamente pelo arquivo `main.py`.
+diretamente pelo arquivo `main.py`. O código pode ser executado em qualquer IDE ou compilador on-line do python, como o [online python](https://www.online-python.com/).
