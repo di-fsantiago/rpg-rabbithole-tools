@@ -5,38 +5,17 @@
 import random
 
 # =========================
-# FUNÇÕES
+# CONSTANTES
 # =========================
 
-def rolar_teste(faces_dado, qtde_dados):
-    dados = []
-    for i in range(qtde_dados):
-        dados.append(random.randint(1,faces_dado))
-    resultado = max(dados)
-    return dados, resultado
-    
-def rolar_dano(faces_dado, qtde_dados):
-    dados = []
-    for i in range(qtde_dados):
-        dados.append(random.randint(1,faces_dado))
-    resultado = sum(dados)
-    return dados, resultado
-
-def rolar_menor_dado(faces_dado, qtde_dados):
-    dados = []
-    for i in range(qtde_dados):
-        dados.append(random.randint(1,faces_dado))
-    resultado = min(dados)
-    return dados, resultado
-
-def exibir_erro_limite():
-    print('O número informado está fora do alcance.')
+MSG_ESCOLHA_FUNCAO = "Escolha qual função você deseja usar: "
+MSG_ESCOLHA_CRIATURA = "Escolha a criatura: "
 
 # =========================
 # INFORMAÇÕES DO JOGO
 # =========================
 
-criaturas = {
+CRIATURAS = {
     1: {
         'nome': 'Freddy',
         
@@ -411,40 +390,83 @@ criaturas = {
 }
 
 # =========================
+# FUNÇÕES
+# =========================
+
+def exibir_criaturas(ids_criaturas):
+    for id_criatura in ids_criaturas:
+        criatura = CRIATURAS[id_criatura]
+        print(f"{id_criatura} - {criatura['nome']}")
+
+def ler_input(prompt, opcoes):
+    while True:
+        try:
+            valor = int(input(prompt))
+        except ValueError:
+            print("Digite um número válido.\n")
+            continue
+        
+        if valor not in opcoes:
+            print("Escolha uma opção válida.\n")
+            continue
+        
+        return valor
+
+def rolar_dano(faces_dado, qtde_dados):
+    dados = []
+    for i in range(qtde_dados):
+        dados.append(random.randint(1,faces_dado))
+    resultado = sum(dados)
+    return dados, resultado
+
+def rolar_teste(faces_dado, qtde_dados):
+    dados = []
+    for i in range(qtde_dados):
+        dados.append(random.randint(1,faces_dado))
+    resultado = max(dados)
+    return dados, resultado
+    
+def rolar_menor_dado(faces_dado, qtde_dados):
+    dados = []
+    for i in range(qtde_dados):
+        dados.append(random.randint(1,faces_dado))
+    resultado = min(dados)
+    return dados, resultado
+
+# =========================
 # PROGRAMA PRINCIPAL
 # =========================
 
 while True:
     print('------')
-    print('')
-    print("Início")
-    print('1: Evento Aleatório;')
-    print('2: Teste de Criaturas;')
-    print('3: Dano de Presença Perturbadora')
-    print('4: Dano de Habilidade')
-    escolha_usuario = int(input('Escolha a função que deseja usar: '))
+    
+    print("\nInício")
+    print('1: Evento Aleatório.')
+    print('2: Teste de Criaturas.')
+    print('3: Dano de Presença Perturbadora.')
+    print('4: Dano de Habilidade.')
+    escolha_usuario = ler_input(MSG_ESCOLHA_FUNCAO, range(1,5))
     print('')
     
     # Verifica a primeira escolha do usuário
     if escolha_usuario == 1:
         
-        print('1: Foxy')
-        print('2: Golden Freddy')
-        escolha_animatronico= int(input('Escolha a função que deseja usar: '))
-        print('')
+        exibir_criaturas([4,5])
+        escolha_animatronico = ler_input(MSG_ESCOLHA_FUNCAO, range(4,6))
+        print("")
         
-        if escolha_animatronico == 1:
+        if escolha_animatronico == 4:
             print('- Estado 0, Cortina Fechada.')
             print('- Estado 1, Cortina levemente aberta.')
             print('- Estado 2, Cortina completamente aberta.')
             print('- Estado 3, Cortina completamente aberta e cabeça vibrando.')
-            estado_foxy = int(input("Qual estado o Foxy está? "))
+            estado_foxy = ler_input("Informe o estado atual do Foxy: ", range(0,4))
             
             if estado_foxy == 0:
                 print('')
                 print('Foxy abrirá sua cortina às 1 da manhã.')
             elif (estado_foxy == 1) or (estado_foxy == 2):
-                numero_rodadas = int(input('Informe quantas rodadas o Foxy já está nessa fase? '))
+                numero_rodadas = ler_input("Informe quantas rodadas o Foxy já está nessa fase: ", range(0,99))
                 print('')
                 if(estado_foxy == 1):
                     qtde_dados_foxy = 2
@@ -455,21 +477,18 @@ while True:
                     4, qtde_dados_foxy+numero_rodadas
                 )
                 
-                print('Dados: ', dados)
+                print("Dados: ", dados)
                 if resultado == 1:
                     if estado_foxy == 1:
-                        print('Foxy agora está no estado 2 com a cortina completamente aberta')
+                        print("Foxy agora está no estado 2 com a cortina completamente aberta.")
                     else:
                         print('Foxy agora está no estado 3 esperando alguém aparecer em seu campo de visão.')
                 else:
                     print('Foxy permanece no mesmo estado.')
-            elif (estado_foxy == 3):
-                print('')
-                print('Foxy só precisa esperar alguém aparecer em seu campo de visão para iniciar a perseguição.')
             else:
-                exibir_erro_limite()
+                print('\nFoxy só precisa esperar alguém aparecer em seu campo de visão para iniciar a perseguição.')
         
-        elif escolha_animatronico == 2:
+        elif escolha_animatronico == 5:
             # Foi criada essa opção para o mestre  realizar uma rápida rolagem para ver se os jogadores
             # encontraram o golden freddy.
             d6_gf1 = random.randint(1,6)
@@ -482,27 +501,15 @@ while True:
             else:
                 print('Sala segura')
                 print(d6_gf1, d6_gf2)
-                
-        else:
-            exibir_erro_limite()
         
     elif escolha_usuario == 2:
         
-        print('1. Freddy')
-        print('2. Bonnie')
-        print('3. Chica')
-        print('4. Foxy')
-        print('5. Golden Freddy')
-        print('6. Viajante')
+        exibir_criaturas(range(1,7))
         
-        escolha_animatronico = int(input('Escolha qual criatura: '))
+        escolha_animatronico = ler_input(MSG_ESCOLHA_CRIATURA, range(1,7))
         # Realiza a escolha do animatronico
-        criatura = criaturas.get(escolha_animatronico)
+        criatura = CRIATURAS.get(escolha_animatronico)
         # Identifica qual animatronico de acordo com o dicionário
-        
-        if (escolha_animatronico > 6) or (escolha_animatronico < 1):
-            exibir_erro_limite()
-            continue
         
         print('')
         print('Testes de Perícia')
@@ -575,6 +582,10 @@ while True:
             ataques = criatura.get('ataques')
 
             margem_ameaca = 0
+            
+            if not ataques:
+                print("A criatura não tem ataques.\n")
+                continue
             
             # Se o alvo ter somente 1 ataque:
             if len(ataques) == 1:
@@ -665,8 +676,10 @@ while True:
         print('4. Foxy - DT 20, 2d6')
         print('5. Golden Freddy - DT 25, 2d6+4')
         print('6. Viajante - DT 20, 3d4')
-        escolha_animatronico = int(input('Escolha a presença perturbadora do animatrônico para jogar? '))
-        print('')
+        escolha_usuario = ler_input("Escolha a presença perturbadora do animatrônico para jogar: ", range(1,7))
+        
+        escolha_animatronico = int(input(' '))
+        print("")
 
         # As 5 criaturas possuem a mesma rolagem
         if(escolha_animatronico >= 1) and (escolha_animatronico <= 5):
@@ -685,95 +698,77 @@ while True:
                 print("Dados: ", dados)
                 
         # Viajante dá dano com uma rolagem diferente
-        elif(escolha_animatronico == 6):
+        else:
             dados, total_dano = rolar_dano(
                 4,3
             )
             print(f"Dano mental: {total_dano}.")
             print("Dados: ", dados)
             
-        else:
-            exibir_erro_limite()
-    
-    elif (escolha_usuario == 4):
-        print('1. Freddy')
-        print('2. Bonnie')
-        print('3. Chica')
-        print('4. Foxy')
-        print('5. Golden Freddy')
-        print('6. Viajante')
-        escolha_animatronico = int(input('Escolha qual criatura: '))
-        print('')
-        criatura = criaturas.get(escolha_animatronico)
-
-        # Escolha ainda deve estrar dentro do alcance
-        if(escolha_animatronico <= 6):
-            # Recebe o valor de habilidades, identificando também caso a criatura não tenha.
-            habilidades = criatura.get('habilidades', {})
-
-            # Informa que a criatura não possui esse tipo de habilidade.
-            if not habilidades:
-                print('A criatura não possui esse tipo de habilidade.')
-                print('')
-                continue
-
-            # Retorna somente a única habilidade lida no dicionário
-            elif len(habilidades) == 1:
-                habilidade = next(iter(habilidades.values()))
-
-            # Cria um laço de repetição que lista todas as habilidades da criatura, perguntando ao usuário qual
-            # habilidade ele irá usar.
-            else:
-                for chave, valor in habilidades.items():
-                    print(f'{chave} - {valor["nome"]}')
-                
-                escolha_habilidade = int(input('Escolha a habilidade: '))
-                habilidade = habilidades.get(escolha_habilidade)
-                print('')
-            
-            dados_dano, total_dano = rolar_dano(
-                habilidade.get('dado_dano'), habilidade.get('qtde_dados')
-            )
-
-            # Informa ao usuário informações da habilidade, como nome, DT e qual o teste de resistência.
-            print(f"Habilidade {habilidade.get('nome')}, DT: {habilidade.get('DT')}, "
-            f"Teste de {habilidade.get('teste_resist')}.")
-
-            # Caso possua algum tipo de bônus de dano, ele o soma no dano da habilidade
-            if 'bonus_dano' in habilidade:
-                bonus_dano = habilidade.get('bonus_dano')
-                print(f"Dano: {total_dano + bonus_dano} {habilidade.get('tipo_dano')}.")
-            # Caso não exista bônus, ele simplesmente o ignora
-            else:
-                print(f"Dano: {total_dano} {habilidade.get('tipo_dano')}.")
-                
-            print("Dados: ", dados_dano)
-
-            # Caso possua dano adicional, ele realiza a rolagem e informa o dano adicional.
-            if 'dado_dano_add' in habilidade:
-                dados_add, total_add = rolar_dano(
-                    habilidade.get('dado_dano_add'),
-                    habilidade.get('qtde_dados_add')
-                )
-                # Caso o dano adicional possua algum tipo de bônus.
-                if 'bonus_dano_add' in habilidade:
-                    bonus_dano_add = habilidade.get('bonus_dano_add')
-                    print(f"Dano Adicional: {total_add + bonus_dano_add} de {habilidade.get('tipo_dano_add')}")
-                else:
-                    print(f"Dano Adicional: {total_add} de {habilidade.get('tipo_dano_add')}")
-                
-                print("Dados: ", dados_add)
-            
-        else:
-            exibir_erro_limite()
-    
     else:
-        exibir_erro_limite()
+        exibir_criaturas(range(1,7))
+        escolha_animatronico = ler_input(MSG_ESCOLHA_CRIATURA, range(1,7))
+        print('')
+        criatura = CRIATURAS.get(escolha_animatronico)
+
+        # Recebe o valor de habilidades, identificando também caso a criatura não tenha.
+        habilidades = criatura.get('habilidades', {})
+
+        # Informa que a criatura não possui esse tipo de habilidade.
+        if not habilidades:
+            print('A criatura não possui esse tipo de habilidade.')
+            print('')
+            continue
+
+        # Retorna somente a única habilidade lida no dicionário
+        elif len(habilidades) == 1:
+            habilidade = next(iter(habilidades.values()))
+
+        # Cria um laço de repetição que lista todas as habilidades da criatura, perguntando ao usuário qual
+        # habilidade ele irá usar.
+        else:
+            for chave, valor in habilidades.items():
+                print(f'{chave} - {valor["nome"]}')
+            
+            escolha_habilidade = int(input('Escolha a habilidade: '))
+            habilidade = habilidades.get(escolha_habilidade)
+            print('')
         
-    print('')
-    
+        dados_dano, total_dano = rolar_dano(
+            habilidade.get('dado_dano'), habilidade.get('qtde_dados')
+        )
+
+        # Informa ao usuário informações da habilidade, como nome, DT e qual o teste de resistência.
+        print(f"Habilidade {habilidade.get('nome')}, DT: {habilidade.get('DT')}, "
+        f"Teste de {habilidade.get('teste_resist')}.")
+
+        # Caso possua algum tipo de bônus de dano, ele o soma no dano da habilidade
+        if 'bonus_dano' in habilidade:
+            bonus_dano = habilidade.get('bonus_dano')
+            print(f"Dano: {total_dano + bonus_dano} {habilidade.get('tipo_dano')}.")
+        # Caso não exista bônus, ele simplesmente o ignora
+        else:
+            print(f"Dano: {total_dano} {habilidade.get('tipo_dano')}.")
+            
+        print("Dados: ", dados_dano)
+
+        # Caso possua dano adicional, ele realiza a rolagem e informa o dano adicional.
+        if 'dado_dano_add' in habilidade:
+            dados_add, total_add = rolar_dano(
+                habilidade.get('dado_dano_add'),
+                habilidade.get('qtde_dados_add')
+            )
+            # Caso o dano adicional possua algum tipo de bônus.
+            if 'bonus_dano_add' in habilidade:
+                bonus_dano_add = habilidade.get('bonus_dano_add')
+                print(f"Dano Adicional: {total_add + bonus_dano_add} de {habilidade.get('tipo_dano_add')}")
+            else:
+                print(f"Dano Adicional: {total_add} de {habilidade.get('tipo_dano_add')}")
+            
+            print("Dados: ", dados_add)
+        
     # Pergunta ao usuário se ele quer continuar
-    rodar_programa = input('Deseja rodar o código novamente? (s/n): ')
+    rodar_programa = input('\nDeseja rodar o código novamente? (s/n): ')
     print('')
     
     if (rodar_programa != 's') and (rodar_programa != '1') and (rodar_programa != 'S'):
