@@ -10,6 +10,15 @@ import random
 
 MSG_ESCOLHA_FUNCAO = "Escolha qual função você deseja usar: "
 MSG_ESCOLHA_CRIATURA = "Escolha a criatura: "
+TIPOS_TESTE = {
+    1: 'furtividade',
+    2: 'iniciativa',
+    3: 'percepcao',
+    11: 'fortitude',
+    12: 'reflexos',
+    13: 'vontade',
+    21: 'ataque',
+}
 
 # =========================
 # INFORMAÇÕES DO JOGO
@@ -272,6 +281,8 @@ CRIATURAS = {
     5: {
         'nome': 'Golden Freddy',
         
+        'ataques':{},
+        
         'furtividade': {
             'bonus': 10,
             'dados': 2
@@ -524,34 +535,13 @@ while True:
         print('')
         print('21. Ataque')
         print('')
-        escolha_teste = int(input('Escolha qual teste: '))
-        print('')
+        escolha_teste = ler_input(
+            "Escolha qual teste: ",
+            TIPOS_TESTE
+        )
+        tipo_teste = TIPOS_TESTE[escolha_teste]
         
-        if escolha_teste == 1 :
-            tipo_teste = 'furtividade'
-            
-        elif escolha_teste == 2:
-            tipo_teste = 'iniciativa'
-            
-        elif escolha_teste == 3:
-            tipo_teste = 'percepcao'
-            
-        elif escolha_teste == 11:
-            tipo_teste = 'fortitude'
-            
-        elif escolha_teste == 12:
-            tipo_teste = 'reflexos'
-        
-        elif escolha_teste == 13:
-            tipo_teste = 'vontade'
-        
-        elif escolha_teste == 21:
-            tipo_teste = 'ataque'
-        
-        else:
-            print("Esse teste não existe.")
-            continue
-            # Avança caso o usuário coloque um valor fora do informado.
+        print("")
         
         # Estrutura que diferencia testes comuns de ataques, se for diferente de 21, é um Teste
         # Padrão.
@@ -604,7 +594,7 @@ while True:
                     
                 # Na linha a seguir, ele identifica qual ataque foi selecionado e
                 # armazena na variável intermediária "Ataque"
-                escolha_ataque = int(input('Escolha o ataque: '))
+                escolha_ataque = ler_input("Escolha o ataque: ", ataques)
                 ataque = ataques.get(escolha_ataque)
                 
             # Faz a chamada da função de rolar um teste de ataque
@@ -628,8 +618,10 @@ while True:
             qtde_dados_dano = ataque.get('qtde_dados')
             
             if (escolha_animatronico == 6):
-                viajante_dano_add = int(input("Quantos seres o viajante já deixou perturbado "
-                "com devorar memória? "))
+                viajante_dano_add = ler_input(
+                    "Quantos seres o viajante já deixou perturbado com devorar memória? "
+                    , range(1,6)
+                )
                 # Viajante passa a dar mais dano com base na condição cumprida.
                 qtde_dados_dano += viajante_dano_add
             else:
@@ -676,9 +668,7 @@ while True:
         print('4. Foxy - DT 20, 2d6')
         print('5. Golden Freddy - DT 25, 2d6+4')
         print('6. Viajante - DT 20, 3d4')
-        escolha_usuario = ler_input("Escolha a presença perturbadora do animatrônico para jogar: ", range(1,7))
-        
-        escolha_animatronico = int(input(' '))
+        escolha_animatronico = ler_input("Escolha a presença perturbadora do animatrônico para jogar: ", range(1,7))
         print("")
 
         # As 5 criaturas possuem a mesma rolagem
@@ -730,7 +720,7 @@ while True:
             for chave, valor in habilidades.items():
                 print(f'{chave} - {valor["nome"]}')
             
-            escolha_habilidade = int(input('Escolha a habilidade: '))
+            escolha_habilidade = ler_input("Escolha a habilidade: ", habilidades)
             habilidade = habilidades.get(escolha_habilidade)
             print('')
         
