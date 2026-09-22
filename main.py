@@ -404,6 +404,17 @@ CRIATURAS = {
 # FUNÇÕES
 # =========================
 
+def confirmar(prompt):
+    while True:
+        resposta = input(prompt).strip().lower()
+        
+        if resposta in ('s','sim','1'):
+            return True
+            
+        if resposta in ('n','nao','não','0'):
+            return False
+        print("Digite s ou n.\n")
+
 def exibir_criaturas(ids_criaturas):
     for id_criatura in ids_criaturas:
         criatura = CRIATURAS[id_criatura]
@@ -422,27 +433,12 @@ def ler_input(prompt, opcoes):
             continue
         
         return valor
-
-def rolar_dano(faces_dado, qtde_dados):
+        
+def rolar_dados(faces_dado, qtde_dados):
     dados = []
     for i in range(qtde_dados):
         dados.append(random.randint(1,faces_dado))
-    resultado = sum(dados)
-    return dados, resultado
-
-def rolar_teste(faces_dado, qtde_dados):
-    dados = []
-    for i in range(qtde_dados):
-        dados.append(random.randint(1,faces_dado))
-    resultado = max(dados)
-    return dados, resultado
-    
-def rolar_menor_dado(faces_dado, qtde_dados):
-    dados = []
-    for i in range(qtde_dados):
-        dados.append(random.randint(1,faces_dado))
-    resultado = min(dados)
-    return dados, resultado
+    return dados
 
 # =========================
 # PROGRAMA PRINCIPAL
@@ -484,9 +480,10 @@ while True:
                 else:
                     qtde_dados_foxy = 1
                 
-                dados, resultado = rolar_menor_dado(
+                dados = rolar_dados(
                     4, qtde_dados_foxy+numero_rodadas
                 )
+                resultado = min(dados)
                 
                 print("Dados: ", dados)
                 if resultado == 1:
@@ -502,16 +499,15 @@ while True:
         elif escolha_animatronico == 5:
             # Foi criada essa opção para o mestre  realizar uma rápida rolagem para ver se os jogadores
             # encontraram o golden freddy.
-            d6_gf1 = random.randint(1,6)
-            d6_gf2 = random.randint(1,6)
+            dados = rolar_dados(6, 2)
             
-            if (d6_gf1 == 1) and (d6_gf2 ==  1):
-                print('GF aparece')
-                print(d6_gf1, d6_gf2)
+            if all(dado == 1 for dado in dados):
+                print('Golden Freddy aparece.')
+                print(dados)
                 
             else:
-                print('Sala segura')
-                print(d6_gf1, d6_gf2)
+                print('Sala segura.')
+                print(dados)
         
     elif escolha_usuario == 2:
         
@@ -548,21 +544,18 @@ while True:
         if (escolha_teste != 21):
                      
             # Faz a chamada da função de rolar um teste
-            dados, resultado = rolar_teste(
-                20,criatura.get(tipo_teste)['dados']
-            )
+            dados = rolar_dados(20, criatura.get(tipo_teste)['dados'])
+            resultado = max(dados)
             bonus = criatura.get(tipo_teste)['bonus']
             
             # O viajante tem uma mecânica que enquanto estiver invisível, recebe um
             # bônus e +15 em furtividade.
             if (escolha_animatronico == 6) and (escolha_teste == 1):
-                invisibilidade = input('O Viajante está invisível? (s/n): ')
-                print('')
                 
-                if (invisibilidade == 's') or (invisibilidade == '1'):
+                if confirmar("O viajante está invisível? (s/n): "):
                     bonus += criatura.get('furtividade')['invisivel']
             
-            print('')
+            print("")
             print(f"Teste de {tipo_teste} de {criatura.get('nome')}: {resultado + bonus}")
             print("Dados: ", dados)
             
@@ -598,17 +591,18 @@ while True:
                 ataque = ataques.get(escolha_ataque)
                 
             # Faz a chamada da função de rolar um teste de ataque
-            dados, resultado = rolar_teste(
+            dados = rolar_dados(
                 20,ataque.get('dados')
             )
+            resultado = max(dados)
+            
             # Move o bônus de ataque para uma variável intermediária
             bonus = ataque.get('bonus')
                 
             # Se a pizzaria estiver sem luz, a margem de ameaça/crítico de Freddy
             # diminui em 1 ponto.
             if (escolha_animatronico == 1):
-                escuridao = input('A pizza está sem luz? (s/n): ')
-                if (escuridao == 's') or (escuridao == '1') or (escuridao == 'S'):
+                if confirmar('A pizza está sem luz? (s/n): '):
                     margem_ameaca = 1
             elif (escolha_animatronico == 4):
                 if (escolha_ataque == 2):
@@ -633,9 +627,10 @@ while True:
 
             # Acerto normal
             if (resultado < (20-margem_ameaca)) :
-                dados_dano, total_dano = rolar_dano(
+                dados_dano = rolar_dados(
                     ataque.get('dado_dano'), qtde_dados_dano
                 )
+                total_dano = sum(dados_dano)
                 bonus_dano = ataque.get('bonus_dano')
                 
                 print(f"Dano do ataque: {total_dano + bonus_dano} de {ataque.get('tipo_dano')}.")
@@ -643,9 +638,10 @@ while True:
                 
             else:
                 # Estrutura para acerto crítico, que dobra os dados naturais de dano
-                dados_dano, total_dano = rolar_dano(
-                    ataque.get('dado_dano'), (qtde_dados_dano) * 2
+                dados_dano = rolar_dados(
+                    ataque.get('dado_dano'), qtde_dados_dano * 2
                 )
+                total_dano = sum(dados_dano)
                 bonus_dano = ataque.get('bonus_dano')
                 
                 print(f"Dano do ataque: {total_dano + bonus_dano} de {ataque.get('tipo_dano')}.")
@@ -653,10 +649,11 @@ while True:
 
             # Se possuir algum tipo de dano adicional, realiza a estrutura a seguir:
             if 'dado_dano_add' in ataque:
-                dados_add, total_add = rolar_dano(
+                dados_add = rolar_dados(
                     ataque.get('dado_dano_add'),
                     ataque.get('qtde_dados_add')
                 )
+                total_add = sum(dados_add)
                 print(f"Dano adicional: {total_add} de {ataque.get('tipo_dano_add')}.")
                 print("Dados: ", dados_add)
                 
@@ -673,9 +670,8 @@ while True:
 
         # As 5 criaturas possuem a mesma rolagem
         if(escolha_animatronico >= 1) and (escolha_animatronico <= 5):
-            dados, total_dano = rolar_dano(
-                6,2
-            )
+            dados = rolar_dados(6,2)
+            total_dano = sum(dados)
 
             # Golden Freddy possui um bônus de +4 ao dano
             if(escolha_animatronico == 5):
@@ -689,9 +685,9 @@ while True:
                 
         # Viajante dá dano com uma rolagem diferente
         else:
-            dados, total_dano = rolar_dano(
-                4,3
-            )
+            dados = rolar_dados(4,3)
+            total_dano = sum(dados)
+
             print(f"Dano mental: {total_dano}.")
             print("Dados: ", dados)
             
@@ -724,10 +720,11 @@ while True:
             habilidade = habilidades.get(escolha_habilidade)
             print('')
         
-        dados_dano, total_dano = rolar_dano(
+        dados_dano = rolar_dados(
             habilidade.get('dado_dano'), habilidade.get('qtde_dados')
         )
-
+        total_dano = sum(dados)
+        
         # Informa ao usuário informações da habilidade, como nome, DT e qual o teste de resistência.
         print(f"Habilidade {habilidade.get('nome')}, DT: {habilidade.get('DT')}, "
         f"Teste de {habilidade.get('teste_resist')}.")
@@ -744,10 +741,12 @@ while True:
 
         # Caso possua dano adicional, ele realiza a rolagem e informa o dano adicional.
         if 'dado_dano_add' in habilidade:
-            dados_add, total_add = rolar_dano(
+            dados_add = rolar_dados(
                 habilidade.get('dado_dano_add'),
                 habilidade.get('qtde_dados_add')
             )
+            total_add = sum(dados_add)
+            
             # Caso o dano adicional possua algum tipo de bônus.
             if 'bonus_dano_add' in habilidade:
                 bonus_dano_add = habilidade.get('bonus_dano_add')
@@ -758,8 +757,5 @@ while True:
             print("Dados: ", dados_add)
         
     # Pergunta ao usuário se ele quer continuar
-    rodar_programa = input('\nDeseja rodar o código novamente? (s/n): ')
-    print('')
-    
-    if (rodar_programa != 's') and (rodar_programa != '1') and (rodar_programa != 'S'):
+    if not confirmar("\nDeseja rodar o código novamente? (s/n): "):
         break
